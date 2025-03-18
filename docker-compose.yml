@@ -9,10 +9,12 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: user_management_db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the SQL file
+    command: --init-file /docker-entrypoint-initdb.d/init.sql  # Run SQL script to create multiple DBs
+    
   order-service:
     build: ./order-service/order-service
     container_name: order-service
