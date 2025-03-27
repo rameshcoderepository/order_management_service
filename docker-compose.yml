@@ -12,7 +12,7 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the SQL file
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the SQL file (This allows the container to read and use the file without copying it permanently into the container’s filesystem.)
     command: --init-file /docker-entrypoint-initdb.d/init.sql  # Run SQL script to create multiple DBs
     
   order-service:
@@ -22,7 +22,7 @@ services:
     depends_on:
       - mysql-db
     ports:
-      - "8081:8081"
+      - "8086:8086"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/order_management_db?allowPublicKeyRetrieval=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
@@ -36,7 +36,7 @@ services:
     depends_on:
       - mysql-db
     ports:
-      - "8082:8082"
+      - "8085:8085"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/inventory_management_db?allowPublicKeyRetrieval=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
